@@ -1,4 +1,5 @@
 const puppeteer = require("puppeteer");
+const cheerio = require("cheerio");
 
 (async () => {
   // 브라우저를 실행합니다.
@@ -16,8 +17,29 @@ const puppeteer = require("puppeteer");
   const content = await page.content();
   console.log(content);
 
-  // 페이지의 스크린샷을 캡처합니다.
-  await page.screenshot({ path: "screenshot.png" });
+  // Cheerio로 HTML 파싱
+  const $ = cheerio.load(content);
+
+  // 제목 추출
+  const title = $("title").text();
+
+  // 이미지 추출
+  const imageUrl = $('meta[property="og:image"]').attr("content");
+
+  // 결과 출력
+  console.log("제목:", title);
+  console.log("이미지 URL:", imageUrl);
+  // 원하는 태그 사이에 있는 텍스트를 추출합니다.
+  const textArray = [];
+
+  // p, li, h1, h2, h3, h4 태그 안에 있는 텍스트를 추출합니다.
+  $("p, li, h1, h2, h3, h4").each((index, element) => {
+    const text = $(element).text();
+    textArray.push(text);
+  });
+
+  // 추출한 텍스트를 출력합니다.
+  console.log(textArray.join(","));
 
   // 브라우저를 닫습니다.
   await browser.close();
