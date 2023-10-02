@@ -1,13 +1,15 @@
 import { createClient } from "@sanity/client";
 import { v4 as uuidv4 } from "uuid";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const client = createClient({
-  projectId: "pztd9ny2",
+  projectId: process.env.SANITY_PROJECT_TOKEN,
   dataset: "production",
   useCdn: true,
   apiVersion: "2023-10-02",
-  token:
-    "ski3JWZgipetcvJr5CeNkyAfLfWgur9Zp5olgorP5lW1gjMD57drc1SlP2rftefE6OQGBbsTWb43F0PnMw4AHRmay15w6I65ZcMJj05QSrLQEoCRjOlxVk5iK3BFNvral3uI4bEc48s1XlapA0DKCT2HdSr2cGV7Jrn5W7HV64pOTnmtg4DR", // Only if you want to update content with the client
+  token: process.env.SANITY_API_TOKEN,
 });
 
 export async function getArticles() {
