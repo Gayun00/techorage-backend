@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 
 import { scrapArticle } from "./services/scrapper.js";
 import { extractKeywords } from "./services/openai.js";
-import { createArticle } from "./services/sanity.js";
+import { createArticle, getArticles } from "./services/sanity.js";
 
 const app = express();
 const port = 5000;
@@ -22,6 +22,17 @@ app.post("/article", async (req, res) => {
 
   res.json({
     message: "요청이 성공적으로 처리되었습니다.",
+  });
+});
+
+app.get("/articles", async (req, res) => {
+  const { token } = req.body;
+
+  const articles = await getArticles({ token });
+
+  res.json({
+    message: "요청이 성공적으로 처리되었습니다.",
+    articles,
   });
 });
 
