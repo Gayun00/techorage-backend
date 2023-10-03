@@ -18,7 +18,13 @@ app.post("/article", async (req, res) => {
 
   const { text, title, imageUrl } = await scrapArticle(requestData.url);
   const keywords = await extractKeywords(title);
-  await createArticle({ text, title, keywords });
+  await createArticle({
+    text,
+    title,
+    keywords,
+    url: requestData.url,
+    thumbnail: imageUrl,
+  });
 
   res.json({
     message: "요청이 성공적으로 처리되었습니다.",

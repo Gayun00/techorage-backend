@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const client = createClient({
-  projectId: process.env.SANITY_PROJECT_TOKEN,
+  projectId: process.env.SANITY_PROJECT_ID,
   dataset: "production",
   useCdn: true,
   apiVersion: "2023-10-02",
@@ -18,11 +18,24 @@ export async function getArticles() {
 }
 
 export async function createArticle(article) {
-  const result = client.createIfNotExists({
+  const result = await client.createIfNotExists({
     _id: uuidv4(),
     _type: "article",
     ...article,
   });
-  console.log(result);
+  console.log(result, article);
   return result;
+}
+
+export async function uploadImage(imageFile) {
+  return fetch(
+    `https://${SANITY_PROJECT_ID}.api.sanity.io/v2023-10-02/assets/images/production`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "image/jpeg",
+      },
+      body: imageFile,
+    }
+  );
 }
