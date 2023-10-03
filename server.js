@@ -70,6 +70,17 @@ app.delete("/articles", async (req, res) => {
   });
 });
 
+app.get("/articles", async (req, res) => {
+  const { token } = req.body;
+
+  const articles = await getArticles({ token });
+
+  res.json({
+    message: "요청이 성공적으로 처리되었습니다.",
+    articles,
+  });
+});
+
 app.listen(port, () => {
   console.log(`서버가 http://localhost:${port} 에서 실행 중입니다.`);
 });
